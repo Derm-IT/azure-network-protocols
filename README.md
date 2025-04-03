@@ -59,7 +59,7 @@ This project documents my hands-on experience in deploying and configuring virtu
     * Search Virtual Networks in Azure.
     * ![image](https://github.com/user-attachments/assets/9dc86de6-62fe-4b94-acbe-e8d1911b77e1)
     * Select your VNET (main-vnet) -> Settings -> Connected Devices.
-    * Should see both VM's netowrk interface to verify both VMs are under the same VNET.
+    * Should see both VM's network interface to verify both VMs are under the same VNET.
     * ![image](https://github.com/user-attachments/assets/5eb3c0ca-3444-4dc0-916b-c3a447f539ef)
 
 ### Part 2: Network Traffic Observation
