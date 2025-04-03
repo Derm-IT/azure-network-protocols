@@ -99,34 +99,58 @@ This project documents my hands-on experience in deploying and configuring virtu
     * As observed the ping command sends 4 requests to the destination IP (which can be typed as an IP or as the domain name which is converted by DNS first) and recieves 4 replys
     *  Windows: `ping -t <ip-address>` creates a continuous ping useful for connectiviy of real time changes
 5.  **Observe SSH Traffic:**
-    * Started a new Wireshark packet capture, filtering for SSH traffic.
-    * From the Windows 10 VM, SSH'd into the Ubuntu VM using its private IP address (`ssh labuser@<private IP address>`).
-    * Typed commands into the Linux SSH connection and observed the SSH traffic in Wireshark.
-    * Exited the SSH connection.
-    * (Add screenshot of Wireshark SSH capture)
+    * Start a new Wireshark packet capture, filtering for SSH traffic. Type `ssh` or `tcp.port==22` and hit enter into filter bar
+    * From the Windows 10 VM, SSH'd into the Linux VM using its private IP address (`ssh adminuser@<private IP address>`).
+    * It will spawn a command line that connects to the Linux VM
+    * Type `touch note.txt` 
+    * Observe the SSH traffic in Wireshark.
+    * Type `ls` in powershell to observe that the file was created
+    * Type `exit` to exit the SSH connection.
+    ![image](https://github.com/user-attachments/assets/f82c7bd8-4c1e-46d6-b8f5-17072a439d1f)
+    ![image](https://github.com/user-attachments/assets/295d7a8f-2e14-4fb9-b880-3d5daffa45a9)
 6.  **Observe DHCP Traffic:**
-    * Started a new Wireshark packet capture, filtering for DHCP traffic.
-    * From the Windows 10 VM, opened PowerShell as administrator and ran `ipconfig /renew`.
-    * Observed the DHCP traffic in Wireshark.
-    * (Add screenshot of Wireshark DHCP capture)
+    * Start a new Wireshark packet capture (capture ->restart->continue without saveing), filtering for DHCP traffic `dhcp` or `udp.port==67 || udp.port==68`.
+    * From the Windows 10 VM, open notepad and type
+      ```
+      ipconfig /release
+      ipconfig /renew
+      ```
+    * Save as dhcp.bat anywhere on the VM but `C:\Users\<username>?` is easiest and make save type `All files`
+    ![image](https://github.com/user-attachments/assets/e2d24e21-9996-4368-a628-289d0568d430)
+    * Open Powershell as admin and run the .bat script
+    * You will lose connection as the ip has been released and once Azures DHCP server assigns a new one from /renew the connection will come back
+    * Observe the DHCP traffic in Wireshark and note the 255.255.255.255 broadcast ip
+    ![image](https://github.com/user-attachments/assets/7422a24c-2c4e-431e-9efc-abd88ef57aa8)
 7.  **Observe DNS Traffic:**
-    * Started a new Wireshark packet capture, filtering for DNS traffic.
-    * From the Windows 10 VM, used `nslookup` to resolve the IP addresses of google.com and disney.com.
+    * Started a new Wireshark packet capture, filtering for DNS traffic, `dns` or `udp.port==53`
+    * From the Windows 10 VM, used `nslookup` in Powershell to resolve the IP addresses of google.com and disney.com.
     * Observed the DNS traffic in Wireshark.
-    * (Add screenshot of Wireshark DNS capture)
+    ![image](https://github.com/user-attachments/assets/9bc1ad1f-cc0e-4e7d-80f1-604cab5f9464)
 8.  **Observe RDP Traffic:**
-    * Started a new Wireshark packet capture, filtering for RDP traffic (`tcp.port == 3389`).
-    * Observed the continuous stream of RDP traffic.
-    * **Observation:** The RDP protocol continuously streams data, resulting in constant traffic, as it provides a live view of the other machine.
-    * (Add screenshot of Wireshark RDP capture)
+    * Start a new Wireshark packet capture, filtering for RDP traffic (`tcp.port == 3389`).
+    * Observe the continuous stream of RDP traffic.
+    * The RDP protocol continuously streams data, resulting in constant traffic, as it provides a live view of the other machine.
+    ![image](https://github.com/user-attachments/assets/a73807cb-0976-4467-bddc-72631bd2b462)
+
 
 ### Part 3: Configuring a Firewall (Network Security Group)
 
 1.  **Disable ICMP Traffic:**
-    * Initiated a perpetual ping from the Windows 10 VM to the Ubuntu VM.
-    * Opened the Network Security Group (NSG) associated with the Ubuntu VM and disabled incoming ICMP traffic.
-    * Observed the ping activity in Wireshark and the command line.
-    * (Add screenshot of NSG ICMP rule change)
+    * Initiate a perpetual ping from the Windows 10 VM to the Linux VM
+    * Type `ping <linux private ip> -t` in Powershell in Windows VM
+    ![image](https://github.com/user-attachments/assets/932b8636-d838-41f6-a295-638a3c490bc5)
+    * Click the Network Security Group (ex. main-linux-vm-nsg) associated with the Linux VM in Azure
+      ![image](https://github.com/user-attachments/assets/b5628d85-1269-44fe-a96e-ee32f08bdff6)
+    * Go to Settings-> Inbound security rules and click Add
+    ![image](https://github.com/user-attachments/assets/200b04f0-ea65-41ce-9c50-b5c28133d717)
+    * Leave everything as is, but set port ranges to *, Protocol to ICMPv4, Action to Deny and Priority to 290
+    ![image](https://github.com/user-attachments/assets/56bb01f6-3e04-4afe-a708-4438f6017a44)
+    * *Note* the priority as a lower number gets seen first and * in port as ICMP doesnt use port and * indicates any port
+    * Add the rule
+    * Return to the Linux VM
+    * Observe the ping activity in Wireshark(may take up to 60s to come into effect)
+    ![image](https://github.com/user-attachments/assets/2f0c6614-d731-46a7-b9a1-df0e8574e5c6)
+
 2.  **Re-enable ICMP Traffic:**
     * Re-enabled ICMP traffic in the NSG.
     * Observed the ping activity in Wireshark and the command line (ping should resume).
