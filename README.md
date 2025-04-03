@@ -156,7 +156,8 @@ This project documents my hands-on experience in deploying and configuring virtu
     * Go back to Inbound Security Rules, select the rule and click delete
     ![image](https://github.com/user-attachments/assets/0aaa4c49-b8a3-42db-8f4e-20cb820d3a65)
     * Observe the ping activity in Wireshark (ping should resume).
-    * Stopp the ping activity.
+    ![image](https://github.com/user-attachments/assets/2d58ca24-2ba3-4b3b-9745-64fd66a54ad3)
+    * Stop the ping activity.
 ### Cleanup (if not using the VM or RG anymore)
 
 1.  **Close Remote Desktop Connection:**
