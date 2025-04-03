@@ -152,17 +152,17 @@ This project documents my hands-on experience in deploying and configuring virtu
     ![image](https://github.com/user-attachments/assets/2f0c6614-d731-46a7-b9a1-df0e8574e5c6)
 
 2.  **Re-enable ICMP Traffic:**
-    * Re-enabled ICMP traffic in the NSG.
-    * Observed the ping activity in Wireshark and the command line (ping should resume).
-    * Stopped the ping activity.
-    * (Add screenshot of NSG ICMP rule restore)
-
+    * Re-enable ICMP traffic in the NSG.
+    * Go back to Inbound Security Rules, select the rule and click delete
+    ![image](https://github.com/user-attachments/assets/0aaa4c49-b8a3-42db-8f4e-20cb820d3a65)
+    * Observe the ping activity in Wireshark (ping should resume).
+    * Stopp the ping activity.
 ### Cleanup (if not using the VM or RG anymore)
 
 1.  **Close Remote Desktop Connection:**
-    * Closed the Remote Desktop connection to the Windows 10 VM.
+    * Close the Remote Desktop connection to the Windows 10 VM.
 2.  **Delete Resource Group(s):**
-    * Deleted the Resource Group created at the beginning of the lab.
+    * Delete the Resource Group created at the beginning of the lab.
 3.  **Verify Resource Group Deletion:**
     * Verified that the Resource Group was successfully deleted.
 
